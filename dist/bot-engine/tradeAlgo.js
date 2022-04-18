@@ -70,7 +70,7 @@ const runTrade = async (tradeData) => {
                 else {
                     await tradeData_1.tradeDataModel.deleteOne({ coin_id: tradeData.coin_id, user_id: tradeData.user_id, exchange: tradeData.exchange });
                 }
-                await tradeLogs_1.tradeLogModel.updateOne({ coin_id: tradeData.coin_id, user_id: tradeData.user_id, exchange: tradeData.exchange }, { profit });
+                await tradeLogs_1.tradeLogModel.updateOne({ coin_id: tradeData.coin_id, user_id: tradeData.user_id, exchange: tradeData.exchange, order_type: 'SELL' }, { profit });
             }
         }
         else {
@@ -108,7 +108,7 @@ const runTrade = async (tradeData) => {
                     user_id: tradeData.user_id,
                     coin_id: tradeData.coin_id,
                     amount: newBuyAmount,
-                    margin_call_number: newMarginCallIndex
+                    margin_call_number: newMarginCallIndex + 1
                 };
                 const exchange = exchangeUtils_1.ExchangeFactory.getExchangeBroker(tradeData.exchange, reinforcedParser(tradeData.api_connection));
                 const buyResponse = await exchange.createBuyOrder(buyBackData);
@@ -127,7 +127,8 @@ const runTrade = async (tradeData) => {
                     });
                     totalPriceEntry += tradeData.current_buy_price;
                     totalPriceEntry += buyResponse.entryPrice; //newest buy.
-                    const currentAveragePrice = totalPriceEntry / (tradeData.trade_history.length + 1);
+                    let denominator = tradeData.trade_history.length + 2; //two accounts for current buy and inital buy
+                    const currentAveragePrice = totalPriceEntry / denominator;
                     const newTakeProfitRatioPrice = (0, botActionPricePoints_1.takeProfitRatioPrice)(tradeData, currentAveragePrice);
                     const nexMarginCallTriggerPrice = (0, botActionPricePoints_1.nextMarginCallPrice)(tradeData, tradeData.entry_price, newMarginCallIndex + 1);
                     const historyPayload = [...tradeData.trade_history,

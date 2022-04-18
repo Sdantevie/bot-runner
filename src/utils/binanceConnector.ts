@@ -1,7 +1,7 @@
 import { botLogModel } from "../data/models/botLogs";
 import { tradeLogModel } from "../data/models/tradeLogs";
 import { platformBinanceApiKey } from "./constants";
-import { buyData, IExchange } from "./exchangeUtils"
+import { buyData, buyResponse, IExchange } from "./exchangeUtils"
 const { Spot } = require('@binance/connector');
 
 const mockResponse = {"symbol":"ADAUSDT","orderId":3105145286,"orderListId":-1,"clientOrderId":"7UYdJlUiBAbRPiRNYcXkTn","transactTime":1649754391944,"price":"0.00000000","origQty":"21.00000000","executedQty":"21.00000000","cummulativeQuoteQty":"19.90800000","status":"FILLED","timeInForce":"GTC","type":"MARKET","side":"BUY","fills":[{"price":"0.94800000","qty":"21.00000000","commission":"0.02100000","commissionAsset":"ADA","tradeId":368211986}]}
@@ -14,8 +14,8 @@ export default class BinanceBroker implements IExchange {
     async createBuyOrder(buyData: buyData) {
         // return {
         //     success: true,
-        //     entryPrice: 0.96,
-        //     quantity: 5
+        //     entryPrice: 150.69,
+        //     quantity: 25
         // }
         try {
             const response = await this._binanceClient.newOrder(buyData.coin_id, "BUY", "MARKET", {
@@ -92,7 +92,7 @@ export default class BinanceBroker implements IExchange {
                     coin_id: sellData.coin_id,
                     exchange: 'binance',
                     user_id: sellData.user_id,
-                    order_type: 'BUY',
+                    order_type: 'SELL',
                     average_price: binanceResponse.price,
                     margin_call_number: sellData.margin_call_number,
                     filled_quantity: binanceResponse.executedQty,

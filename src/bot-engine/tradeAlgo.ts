@@ -95,7 +95,7 @@ const runTrade = async (tradeData: any) => {
                     await tradeDataModel.deleteOne({ coin_id: tradeData.coin_id, user_id: tradeData.user_id, exchange: tradeData.exchange });
                 }
 
-                await tradeLogModel.updateOne({ coin_id: tradeData.coin_id, user_id: tradeData.user_id, exchange: tradeData.exchange }, { profit })
+                await tradeLogModel.updateOne({ coin_id: tradeData.coin_id, user_id: tradeData.user_id, exchange: tradeData.exchange, order_type: 'SELL' }, { profit })
             }
         } else {
             //update only when price is going up
@@ -140,7 +140,7 @@ const runTrade = async (tradeData: any) => {
                     user_id: tradeData.user_id,
                     coin_id: tradeData.coin_id,
                     amount: newBuyAmount,
-                    margin_call_number: newMarginCallIndex
+                    margin_call_number: newMarginCallIndex + 1
                 };
 
                 const exchange = ExchangeFactory.getExchangeBroker(tradeData.exchange, reinforcedParser(tradeData.api_connection));
@@ -164,17 +164,19 @@ const runTrade = async (tradeData: any) => {
 
                     totalPriceEntry += buyResponse.entryPrice; //newest buy.
 
-                    const currentAveragePrice = totalPriceEntry / (tradeData.trade_history.length + 1);
+                    let denominator = tradeData.trade_history.length + 2; //two accounts for current buy and inital buy
+                    
+                    const currentAveragePrice = totalPriceEntry / denominator;
                     const newTakeProfitRatioPrice = takeProfitRatioPrice(tradeData, currentAveragePrice);
                     const nexMarginCallTriggerPrice = nextMarginCallPrice(tradeData, tradeData.entry_price, newMarginCallIndex + 1);
 
                     const historyPayload = [...tradeData.trade_history,
-                    {
-                        buyAmount: tradeData.current_buy_amount,
-                        buyPrice: tradeData.current_buy_price,
-                        quantity: tradeData.current_quantity,
-                        margin: tradeData.current_margin
-                    }
+                        {
+                            buyAmount: tradeData.current_buy_amount,
+                            buyPrice: tradeData.current_buy_price,
+                            quantity: tradeData.current_quantity,
+                            margin: tradeData.current_margin
+                        }
                     ];
                     const payload = {
                         ...tradeData,
@@ -232,7 +234,7 @@ const receiveTrade = async () => {
             const trade = trades[i];
             runTrade(trade);
         }
-    })
+    });
 }
 
 const reinforcedParser = (stringContent: string) => {

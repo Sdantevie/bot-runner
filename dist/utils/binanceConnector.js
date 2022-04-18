@@ -13,8 +13,8 @@ class BinanceBroker {
     async createBuyOrder(buyData) {
         // return {
         //     success: true,
-        //     entryPrice: 0.96,
-        //     quantity: 5
+        //     entryPrice: 150.69,
+        //     quantity: 25
         // }
         try {
             const response = await this._binanceClient.newOrder(buyData.coin_id, "BUY", "MARKET", {
@@ -90,7 +90,7 @@ class BinanceBroker {
                     coin_id: sellData.coin_id,
                     exchange: 'binance',
                     user_id: sellData.user_id,
-                    order_type: 'BUY',
+                    order_type: 'SELL',
                     average_price: binanceResponse.price,
                     margin_call_number: sellData.margin_call_number,
                     filled_quantity: binanceResponse.executedQty,
