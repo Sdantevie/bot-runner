@@ -12,7 +12,6 @@ import { devDbUrl } from "../utils/constants";
 const runTrade = async (tradeData: any) => {
     const currentPrice = await PriceStore.Instance.getPrice(tradeData.exchange, tradeData.coin_id);
     // console.log(currentPrice);
-    // const currentPrice = 1.02
 
     if (tradeData.has_closed_trade && tradeData.trade_type == 'Cycle') {
         const buyBackPriceDifference = comparePrices(currentPrice, tradeData.closing_price);
@@ -125,13 +124,13 @@ const runTrade = async (tradeData: any) => {
     if (tradeData.is_running_margin_call) {
         //greater than minues one implies that next margin exist.
         if (tradeData.next_margin_call_price > -1) {
-            const nextMarginCallPriceCompare = comparePrices(currentPrice, tradeData.next_margin_call_price, 0.1);
+            const nextMarginCallPriceCompare = comparePrices(currentPrice, tradeData.next_margin_call_price, 0.00001);
+            console.log(nextMarginCallPriceCompare);
             if ((nextMarginCallPriceCompare.differenceLevel == differenceLevel.SAME)
                 || (nextMarginCallPriceCompare.differenceLevel == differenceLevel.LESS && nextMarginCallPriceCompare.actionable)) {
 
                 //buy back,  recalculate take_profit and next_margin_Call price. -- (done)
                 //move all details into history -- (done)
-
 
                 const newMarginCallIndex = tradeData.current_margin; //due to first buy current margin index is the next margin
                 const callMarginConfig = tradeData.margin_config[newMarginCallIndex];

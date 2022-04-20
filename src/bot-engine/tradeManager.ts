@@ -43,5 +43,5 @@ export const botRunner = async () => {
             const chunk = tradeChunks[i];
             workerPool[i].postMessage(JSON.stringify(chunk))
         }
-    }, 3000);
+    }, 4000);
 }

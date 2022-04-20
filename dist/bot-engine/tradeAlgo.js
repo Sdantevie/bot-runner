@@ -15,7 +15,6 @@ const constants_1 = require("../utils/constants");
 const runTrade = async (tradeData) => {
     const currentPrice = await priceStore_1.default.Instance.getPrice(tradeData.exchange, tradeData.coin_id);
     // console.log(currentPrice);
-    // const currentPrice = 1.02
     if (tradeData.has_closed_trade && tradeData.trade_type == 'Cycle') {
         const buyBackPriceDifference = (0, priceComparator_1.comparePrices)(currentPrice, tradeData.closing_price);
         if ((buyBackPriceDifference.differenceLevel == priceComparator_1.differenceLevel.LESS)
@@ -96,7 +95,8 @@ const runTrade = async (tradeData) => {
     if (tradeData.is_running_margin_call) {
         //greater than minues one implies that next margin exist.
         if (tradeData.next_margin_call_price > -1) {
-            const nextMarginCallPriceCompare = (0, priceComparator_1.comparePrices)(currentPrice, tradeData.next_margin_call_price, 0.1);
+            const nextMarginCallPriceCompare = (0, priceComparator_1.comparePrices)(currentPrice, tradeData.next_margin_call_price, 0.00001);
+            console.log(nextMarginCallPriceCompare);
             if ((nextMarginCallPriceCompare.differenceLevel == priceComparator_1.differenceLevel.SAME)
                 || (nextMarginCallPriceCompare.differenceLevel == priceComparator_1.differenceLevel.LESS && nextMarginCallPriceCompare.actionable)) {
                 //buy back,  recalculate take_profit and next_margin_Call price. -- (done)

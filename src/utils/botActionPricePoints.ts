@@ -13,7 +13,7 @@ export const  nextMarginCallPrice = (config: any, entryPrice: number, margin_cal
     if(margin_config) {
         const ratio = margin_config.margin_call_drop;
         const decrease = (ratio / 100) * entryPrice;
-        return (entryPrice - decrease).toFixed(4)
+        return (entryPrice - decrease)
     } else {
         return -1;
     }
