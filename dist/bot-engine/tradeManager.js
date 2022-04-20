@@ -24,9 +24,9 @@ const botRunner = async () => {
             allLiveTrades.push(data.fullDocument);
         }
         if (data.operationType == 'update') {
-            if ('is_paused' in data.updateDescription.updatedFields) {
-                allLiveTrades = await tradeData_1.tradeDataModel.find({ is_paused: false });
-            }
+            // if('is_paused' in data.updateDescription.updatedFields){
+            // }
+            allLiveTrades = await tradeData_1.tradeDataModel.find({ is_paused: false });
         }
         if (data.operationType == 'delete') {
             allLiveTrades = await tradeData_1.tradeDataModel.find({ is_paused: false });

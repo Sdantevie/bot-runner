@@ -4,7 +4,7 @@ exports.takeProfitCallbackPrice = exports.botActionPricePoints = exports.nextMar
 const takeProfitRatioPrice = (config, entryPrice) => {
     const ratio = config.whole_position_take_profit_ratio;
     const increase = (ratio / 100) * entryPrice;
-    return (increase + entryPrice).toFixed(4);
+    return (increase + entryPrice);
 };
 exports.takeProfitRatioPrice = takeProfitRatioPrice;
 const nextMarginCallPrice = (config, entryPrice, margin_call) => {

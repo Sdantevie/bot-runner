@@ -3,7 +3,7 @@ import { marginConfig } from "../@types/payloads";
 export const takeProfitRatioPrice = (config: any, entryPrice: any) => {
     const ratio = config.whole_position_take_profit_ratio;
     const increase = (ratio / 100) * entryPrice;
-    return (increase + entryPrice).toFixed(4);
+    return (increase + entryPrice)
 }
 
 

@@ -23,9 +23,10 @@ export const botRunner = async () => {
         }
 
         if(data.operationType == 'update') {
-            if('is_paused' in data.updateDescription.updatedFields){
-                allLiveTrades = await tradeDataModel.find({ is_paused: false }); 
-            }
+            // if('is_paused' in data.updateDescription.updatedFields){
+               
+            // }
+            allLiveTrades = await tradeDataModel.find({ is_paused: false });
         }
 
         if(data.operationType == 'delete') {
