@@ -95,10 +95,9 @@ const runTrade = async (tradeData) => {
     if (tradeData.is_running_margin_call) {
         //greater than minues one implies that next margin exist.
         if (tradeData.next_margin_call_price > -1) {
-            const nextMarginCallPriceCompare = (0, priceComparator_1.comparePrices)(currentPrice, tradeData.next_margin_call_price, 0.00001);
-            console.log(nextMarginCallPriceCompare);
-            if ((nextMarginCallPriceCompare.differenceLevel == priceComparator_1.differenceLevel.SAME)
-                || (nextMarginCallPriceCompare.differenceLevel == priceComparator_1.differenceLevel.LESS && nextMarginCallPriceCompare.actionable)) {
+            const nextMarginCallPriceCompare = (0, priceComparator_1.comparePrices)(currentPrice, tradeData.next_margin_call_price);
+            if (nextMarginCallPriceCompare.differenceLevel == priceComparator_1.differenceLevel.SAME
+                || nextMarginCallPriceCompare.differenceLevel == priceComparator_1.differenceLevel.LESS) {
                 //buy back,  recalculate take_profit and next_margin_Call price. -- (done)
                 //move all details into history -- (done)
                 const newMarginCallIndex = tradeData.current_margin; //due to first buy current margin index is the next margin
